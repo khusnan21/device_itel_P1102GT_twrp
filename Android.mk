@@ -16,6 +16,13 @@
 
 LOCAL_PATH := $(call my-dir)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE := dtb.img
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_PATH := $(TARGET_OUT)
+LOCAL_PREBUILT_MODULE_FILE := $(DEVICE_PATH)/prebuilt/dtb.img
+include $(BUILD_PREBUILT)
+
 ifeq ($(TARGET_DEVICE),P1102GT)
 include $(call all-subdir-makefiles,$(LOCAL_PATH))
 endif
