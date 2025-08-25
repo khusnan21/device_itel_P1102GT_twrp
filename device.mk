@@ -90,3 +90,12 @@ TARGET_RECOVERY_DEVICE_MODULES += \
 
 TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
 	$(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.keymaster@4.1.so
+
+# Inject properti dari stock system ke recovery
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.product.device=itel-P1102GT \
+    ro.product.name=P1102GT-OP \
+    ro.product.brand=Itel \
+    ro.product.model=itel P1102GT \
+    ro.product.manufacturer=ITEL \
+    ro.build.fingerprint=Itel/P1102GT-OP/itel-P1102GT:15/AP3A.240905.015.A2/1744711704:user/release-keys
