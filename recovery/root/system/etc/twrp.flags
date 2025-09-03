@@ -1,47 +1,65 @@
-# Android fstab file.
-# The filesystem that contains the filesystem checker binary (typically /system) cannot
-# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+# mount point       fstype    device                                                                flags
 
-# mount point		fs		device						device2			 device3			flags
-# User writeable partitions
-/boot			emmc		/dev/block/by-name/boot											flags=display=boot;slotselect;backup;flashimg
-/vendor_boot		emmc		/dev/block/by-name/vendor_boot										flags=display=vendor_boot;slotselect;backup;flashimg
-/vbmeta			emmc		/dev/block/by-name/vbmeta										flags=display=vbmeta;slotselect;backup;flashimg
-/vbmeta_system		emmc		/dev/block/by-name/vbmeta_system									flags=display=vbmeta_system;slotselect;backup;flashimg
-/vbmeta_vendor		emmc		/dev/block/by-name/vbmeta_vendor									flags=display=vbmeta_vendor;slotselect;backup;flashimg
+## User-writable / Storage partitions
+/boot			        emmc	/dev/block/by-name/boot			flags=display="boot";backup=1;flashimg=1;slotselect
+/dtbo			        emmc 	/dev/block/by-name/dtbo 		        flags=display="dtbo";backup=1;flashimg=1;slotselect
+/dtb			        emmc 	/dev/block/by-name/dtb 		        flags=display="dtbo";backup=1;flashimg=1;slotselect
+/vendor_boot        emmc      /dev/block/by-name/vendor_boot                    flags=display="Vendor Boot";flashimg=1;backup=1;slotselect
 
-# Firmware
-/dtbo			emmc		/dev/block/by-name/dtbo											flags=display=dtbo;slotselect;backup
-/metadata		ext4		/dev/block/by-name/metadata										flags=display=metadata;backup
-/misc			emmc		/dev/block/by-name/misc											flags=display=misc;backup
 
-# Sensitive Data
-/nvcfg			ext4		/dev/block/by-name/nvcfg										flags=display=nvcfg;backup
-/persist_image		emmc		/dev/block/by-name/persist										flags=display=persist;backup
-/persistent		emmc		/dev/block/by-name/frp											flags=display=persistent;backup
+# VERIFY BOOT
 
-# IMEI and modem related
-/nvdata			ext4		/dev/block/by-name/nvdata										flags=display=nvdata;backup
-/protect_f		ext4		/dev/block/by-name/protect1										flags=display=protect_f;backup
-/protect_s		ext4		/dev/block/by-name/protect2										flags=display=protect_s;backup
-/nvram			emmc		/dev/block/by-name/nvram										flags=display=nvram;backup
+/vbmeta                         emmc    /dev/block/by-name/vbmeta                   flags=display="VBMeta";backup=1;flashimg=1;slotselect
+/vbmeta_system                  emmc    /dev/block/by-name/vbmeta_system            flags=display="VBMeta_system";backup=1;flashimg=1;slotselect
+/vbmeta_vendor                  emmc    /dev/block/by-name/vbmeta_vendor            flags=display="VBMeta_vendor";backup=1;flashimg=1;slotselect
 
-# Standard MediaTeks's partitions
-/expdb			emmc		/dev/block/by-name/expdb										flags=display=expdb
-/logo			emmc		/dev/block/by-name/logo											flags=display=logo;slotselect;backup
-/otp			emmc		/dev/block/by-name/otp											flags=display=otp
-/seccfg			emmc		/dev/block/by-name/seccfg										flags=display=seccfg
-/spmfw			emmc		/dev/block/by-name/spmfw										flags=display=spmfw;slotselect
-/tee1			emmc		/dev/block/by-name/tee1											flags=display=tee1
-/tee2			emmc		/dev/block/by-name/tee2											flags=display=tee2
+/vbmeta_odm                  emmc    /dev/block/by-name/vbmeta_odm            flags=display="VBMeta_vendor";backup=1;flashimg=1;slotselect
 
-# Removable Storage
-/external_sd		auto		/dev/block/mmcblk1p1				/dev/block/mmcblk0p1					flags=display="Micro SD Card";storage;wipeingui;removable;backup=0
-/usb_otg		auto		/dev/block/sda1					/dev/block/sda		/dev/block/sdd1			flags=display="USB-OTG";storage;wipeingui;removable;backup=0
+/vbmeta_product                  emmc    /dev/block/by-name/vbmeta_product            flags=display="VBMeta_product";backup=1;flashimg=1;slotselect
 
-# Flashable logical partitions
-/system_image		emmc		/dev/block/bootdevice/by-name/system									flags=backup;flashimg
-/vendor_image		emmc		/dev/block/bootdevice/by-name/vendor									flags=backup;flashimg
-/system_ext_image	emmc		/dev/block/bootdevice/by-name/system_ext								flags=display="System_EXT Image";backup;flashimg
-/product_image		emmc		/dev/block/bootdevice/by-name/product									flags=display="Product Image";backup;flashimg
-/vendor_dlkm_image	emmc		/dev/block/bootdevice/by-name/vendor_dlkm								flags=display="VendorDLKM Image";backup;flashimg
+## Firmware
+
+
+/misc emmc /dev/block/by-name/misc  
+
+/persist emmc /dev/block/by-name/persist flags=display="Persist";flashimg
+/logo emmc /dev/block/by-name/logo flags=display="logo";
+/fbootlogo emmc /dev/block/by-name/fbootlogo flags=display="fbootlogo"
+/tranfs ext4 /dev/block/by-name/tranfs flags=display="tranfs"
+/miscdata emmc /dev/block/by-name/miscdata flags=display="miscdata"
+
+/system_image_a           emmc      /dev/block/mapper/system_a                                flags=display="System Image A";flashimg=1;backup=1
+/vendor_image_a           emmc      /dev/block/mapper/vendor_a                                  flags=display="Vendor Image A";flashimg=1;backup=1
+/product_image_a          emmc      /dev/block/mapper/product_a                                 flags=display="Product Image A";flashimg=1;backup=1
+/system_ext_image_a       emmc      /dev/block/mapper/system_ext_a                            flags=display="System_EXT Image A";flashimg=1;backup=1
+/odm_a                    emmc      /dev/block/mapper/odm_a                                   flags=display="Odm A";flashimg=1;backup=1
+/vendor_dlkm              emmc      /dev/block/mapper/vendor_dlkm_a                           flags=display="Vendor_DLKM A";flashimg=1;backup=1
+
+
+/system_image_b           emmc         /dev/block/mapper/system_b                             flags=display="System Image B";flashimg=1;backup=1
+/vendor_image_b           emmc          /dev/block/mapper/vendor_b                           flags=display="Vendor Image B";flashimg=1;backup=1
+/product_image_b          emmc         /dev/block/mapper/product_b                           flags=display="Product Image B";flashimg=1;backup=1
+/system_ext_image_b       emmc        /dev/block/mapper/system_ext_b                         flags=display="System_EXT Image B";flashimg=1;backup=1
+/odm_b                    emmc      /dev/block/mapper/odm_b                                   flags=display="Odm B";flashimg=1;backup=1
+/vendor_dlkm_b            emmc      /dev/block/mapper/vendor_dlkm_b                           flags=display="Vendor_DLKM B";flashimg=1;backup=1
+
+
+/super                    emmc         /dev/block/by-name/super                  flags=display="Super";flashimg
+/userdata_default                 emmc       /dev/block/by-name/userdata                 flags=display="Userdata default";flashimg
+/userdata_mapper               emmc       /dev/block/mapper/userdata                 flags=display="Userdata Mapper";flashimg
+
+
+# Dynamic Partitions ( A Slots )
+
+
+
+# Removable storage
+/external_sd		auto	/dev/block/mmcblk1p1	/dev/block/mmcblk1			flags=display="External SDcard";storage;wipeingui;removable;backup=0
+/usbotg				auto    /dev/block/sda1			/dev/block/sda				flags=display="Usb-Otg";storage;wipeingui;removable;backup=0
+
+
+/data auto /dev/block/by-name/userdata flags=display="Data"
+
+
+## Internal storage (for OrangeFox)
+#/storage            f2fs      /data/media/0                                                         flags=display="Internal Storage";usermrf;backup=1;fsflags="bind";removable;
