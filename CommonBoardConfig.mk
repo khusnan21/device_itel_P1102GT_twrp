@@ -1,5 +1,5 @@
 
-DEVICE_PATH := device/itel/$(PRODUCT_DEVICE)
+DEVICE_PATH := device/itel/P1102GT
 
 AB_OTA_UPDATER := true
 
