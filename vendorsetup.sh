@@ -1,3 +1,0 @@
-add_lunch_combo twrp_P1102GT-eng
-add_lunch_combo twrp_P1102GT-user
-add_lunch_combo twrp_P1102GT-userdebug
