@@ -1,6 +1,3 @@
-
-DEVICE_PATH := device/itel/P1102GT
-
 AB_OTA_UPDATER := true
 
 ALLOW_MISSING_DEPENDENCIES := true
@@ -76,10 +73,10 @@ TARGET_COPY_OUT_SYSTEM_EXT := system_ext
 # Recovery
 TARGET_NO_RECOVERY := true
 TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
-TARGET_RECOVERY_FSTAB := $(BASE_DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 
 # Properties
-TARGET_SYSTEM_PROP += $(BASE_DEVICE_PATH)/system.prop
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
 # Image settings
 TARGET_NO_KERNEL := true
