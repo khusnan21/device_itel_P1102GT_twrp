@@ -20,7 +20,6 @@ AB_OTA_PARTITIONS += \
     product \
     system_ext \
     boot \
-    vendor \
     vendor_boot \
     vendor_dlkm \
     vbmeta \
