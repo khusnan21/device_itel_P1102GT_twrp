@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+PRODUCT_DEVICE := $(notdir $(LOCAL_DIR))
 
 PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/twrp_P1102GT.mk
