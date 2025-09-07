@@ -1,126 +1,121 @@
+#
+# Copyright (C) 2022 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 
-LOCAL_PATH := device/itel/P1102GT
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 
-# Dynamic
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
+# Installs gsi keys into ramdisk, to boot a developer GSI with verified boot.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 
-# VNDK
-PRODUCT_TARGET_VNDK_VERSION := 31
+# Enable project quotas and casefolding for emulated storage without sdcardfs
+$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-# API level
-PRODUCT_SHIPPING_API_LEVEL := 31
+# Enable Virtual A/B OTA
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
 
-# A/B partitions
 ENABLE_VIRTUAL_AB := true
 AB_OTA_UPDATER := true
+
 AB_OTA_PARTITIONS += \
-    dtbo \
-    system \
-    vendor \
-    product \
-    system_ext \
     boot \
+    dtbo \
+    lk \
+    odm \
+    odm_dlkm \
+    product \
+    system \
+    system_ext \
+    vbmeta_system \
+    vbmeta_vendor \
     vendor \
     vendor_boot \
-    vendor_dlkm \
-    vbmeta \
-    vbmeta_vendor \
-    vbmeta_system \
+    vendor_dlkm
 
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
     POSTINSTALL_PATH_system=system/bin/mtk_plpath_utils \
-    FILESYSTEM_TYPE_system=erofs \
-    POSTINSTALL_OPTIONAL_system=true \
+    FILESYSTEM_TYPE_system=ext4 \
+    POSTINSTALL_OPTIONAL_system=true
 
-# Boot control HAL
-PRODUCT_PACKAGES += \
-    bootctrl \
-    bootctrl.recovery \
-    android.hardware.boot@1.2-service \
-    android.hardware.boot@1.2-mtkimpl \
-    android.hardware.boot@1.2-mtkimpl.recovery \
-
-PRODUCT_PACKAGES += \
-    libgptutils \
-    libz \
-    libcutils \
+AB_OTA_POSTINSTALL_CONFIG += \
+    RUN_POSTINSTALL_vendor=true \
+    POSTINSTALL_PATH_vendor=bin/checkpoint_gc \
+    FILESYSTEM_TYPE_vendor=ext4 \
+    POSTINSTALL_OPTIONAL_vendor=true
 
 PRODUCT_PACKAGES += \
     otapreopt_script \
-    cppreopts.sh \
-    update_engine \
-    update_verifier \
-    update_engine_sideload \
-    update_engine_client \
+    cppreopts.sh
 
-# Health
+PRODUCT_PROPERTY_OVERRIDES += ro.twrp.vendor_boot=true
+
+# Dynamic Partitions
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
+# API
+PRODUCT_SHIPPING_API_LEVEL := 31
+PRODUCT_TARGET_VNDK_VERSION := 31
+
+# Boot control HAL
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.2-mtkimpl \
+    android.hardware.boot@1.2-mtkimpl.recovery
+
+PRODUCT_PACKAGES_DEBUG += \
+    bootctrl
+
+# Fastbootd
+PRODUCT_PACKAGES += \
+    android.hardware.fastboot@1.0-impl-mock \
+    fastbootd
+
+# Health Hal
 PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl \
-    android.hardware.health@2.1-service \
-
-# Suspend service
-TARGET_RECOVERY_DEVICE_MODULES += \
-    libSuspendProperties \
-    android.system.suspend@1.0 \
-    android.system.suspend-service \
-
-RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libSuspendProperties.so
-RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.system.suspend@1.0.so
-RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.system.suspend-V1-ndk.so
-RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.system.suspend.control-V1-cpp.so
-RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.system.suspend.control.internal-cpp.so
-RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/hw/android.system.suspend-service
+    android.hardware.health@2.1-service
 
 # Keymaster
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@4.0.vendor \
-    android.hardware.keymaster@4.1 \
+    android.hardware.keymaster@4.1
 
-# Keymint
+# Keystore Hal
+PRODUCT_PACKAGES += \
+    android.system.keystore2
+
+# MTK plpath utils
+PRODUCT_PACKAGES += \
+    mtk_plpath_utils \
+    mtk_plpath_utils.recovery
+
+# Security
 PRODUCT_PACKAGES += \
     android.hardware.security.keymint \
     android.hardware.security.secureclock \
-    android.hardware.security.sharedsecret \
+    android.hardware.security.sharedsecret
 
-# Remotely Key provisioner
-PRODUCT_PACKAGES += android.hardware.security.rkp-V3-ndk
-RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/android.hardware.security.rkp-V3-ndk.so
-RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/libcppcose_rkp.so
-
-# Keystore2
+# Update engine
 PRODUCT_PACKAGES += \
-    android.system.keystore2 \
+    update_engine \
+    update_engine_sideload \
+    update_verifier
 
-# Gatekeeper
-PRODUCT_PACKAGES += \
-    android.hardware.gatekeeper@1.0.vendor \
-    android.hardware.gatekeeper@1.0-impl \
-    android.hardware.gatekeeper@1.0-service \
+PRODUCT_PACKAGES_DEBUG += \
+    update_engine_client
 
-RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/android.hardware.gatekeeper-V1-ndk.so
+# Additional configs
+TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.keymaster@4.1
 
-# Otacert
+TARGET_RECOVERY_DEVICE_MODULES += \
+    android.hardware.keymaster@4.1
+
 PRODUCT_EXTRA_RECOVERY_KEYS += \
     $(LOCAL_PATH)/security/releasekey
 
-# Mtk plpath utils
-PRODUCT_PACKAGES += \
-    mtk_plpath_utils \
-    mtk_plpath_utils.recovery \
-
-# snapuserd
-PRODUCT_PACKAGES += snapuserd
-RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/snapuserd
-
-# Soong namespaces
-PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
-
-# Fix missing json configs
-PRODUCT_COPY_FILES += $(TOP)/system/core/libprocessgroup/profiles/cgroups.recovery.json:$(TARGET_COPY_OUT_RECOVERY)/root/etc/cgroups.json
-PRODUCT_COPY_FILES += $(TOP)/system/core/libprocessgroup/profiles/task_profiles.json:$(TARGET_COPY_OUT_RECOVERY)/root/etc/task_profiles.json
-PRODUCT_COPY_FILES += $(TOP)/system/core/libprocessgroup/profiles/task_profiles.json:$(TARGET_COPY_OUT_RECOVERY)/root/system/etc/task_profiles.json
-
-# Fix missing fstab configs
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/vendor_ramdisk/first_stage_ramdisk/fstab.mt6789:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.mt6789
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/vendor_ramdisk/first_stage_ramdisk/fstab.emmc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.emmc
+TARGET_OTA_CERTIFICATE := device/itel/P1102GT/security/releasekey.x509.pem
+PRODUCT_EXTRA_RECOVERY_KEYS += device/itel/P1102GT/security/releasekey

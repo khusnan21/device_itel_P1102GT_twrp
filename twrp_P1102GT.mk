@@ -1,32 +1,19 @@
+#
+# Copyright (C) 2022 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 
-$(call inherit-product, device/itel/P1102GT/patches.mk ) 
-
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
-
-# Configure twrp config common.mk
-$(call inherit-product, vendor/twrp/config/common.mk)
-
-# Device specific configs
+# Inherit Infinix XPAD device stuff
 $(call inherit-product, device/itel/P1102GT/device.mk)
 
-# Configure launch_with_vendor_ramdisk.mk
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_vendor_ramdisk.mk)
-
-# Configure compression
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
-
-# Configure virtual_ab_ota.mk
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
-
-# Configure emulated_storage.mk
-$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+# Inherit some common TWRP stuff.
+$(call inherit-product, vendor/twrp/config/common.mk)
 
 # Product Specifics
 PRODUCT_NAME := twrp_P1102GT
 PRODUCT_DEVICE := P1102GT
-PRODUCT_BRAND := itel 
+PRODUCT_BRAND := itel
 PRODUCT_MODEL := itel P1102GT
 PRODUCT_MANUFACTURER := itel
 

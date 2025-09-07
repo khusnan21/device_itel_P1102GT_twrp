@@ -81,3 +81,7 @@ subsystem dma_heap
 /sys/devices/system/cpu/cpu*   cpufreq/scaling_min_freq   0664  system system
 /sys/devices/virtual/misc/uhid/*/leds/* brightness   0664  system system
 /sys/devices/virtual/misc/uhid/*/leds/* multi_intensity   0664  system system
+
+#SDD: add TESSCR-19159 by chonglin.yang 2023/5/12 for system monitor feature. Start
+/dev/ensignal   0666   root   root
+#SDD: add TESSCR-19159 by chonglin.yang 2023/5/12 for system monitor feature. End

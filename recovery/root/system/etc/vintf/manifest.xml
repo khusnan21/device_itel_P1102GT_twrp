@@ -23,16 +23,6 @@
         <fqname>@1.0::ISensorManager/default</fqname>
     </hal>
     <hal format="hidl">
-        <name>android.hidl.manager</name>
-        <transport>hwbinder</transport>
-        <version>1.2</version>
-        <interface>
-            <name>IServiceManager</name>
-            <instance>default</instance>
-        </interface>
-        <fqname>@1.2::IServiceManager/default</fqname>
-    </hal>
-    <hal format="hidl">
         <name>android.hidl.memory</name>
         <transport arch="32+64">passthrough</transport>
         <fqname>@1.0::IMapper/ashmem</fqname>
@@ -42,14 +32,14 @@
         <transport>hwbinder</transport>
         <fqname>@1.1::INetd/default</fqname>
     </hal>
-    <hal format="hidl">
+    <hal format="aidl">
+        <name>android.system.keystore2</name>
+        <version>1</version>
+        <fqname>IKeystoreService/default</fqname>
+    </hal>
+    <hal format="hidl" max-level="7">
         <name>android.system.wifi.keystore</name>
         <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IKeystore</name>
-            <instance>default</instance>
-        </interface>
         <fqname>@1.0::IKeystore/default</fqname>
     </hal>
     <hal format="native">
@@ -63,6 +53,5 @@
         <version>32</version>
         <version>33</version>
         <version>34</version>
-        <version>35</version>
     </system-sdk>
 </manifest>
